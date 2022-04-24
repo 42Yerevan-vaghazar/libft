@@ -6,11 +6,12 @@
 /*   By: vaghazar <vaghazar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/18 19:27:44 by vaghazar          #+#    #+#             */
-/*   Updated: 2022/04/17 15:35:09 by vaghazar         ###   ########.fr       */
+/*   Updated: 2022/04/24 13:59:34 by vaghazar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
+#include <string.h>
 
 int	find_first(char const *s1, char const *set)
 {
@@ -32,46 +33,33 @@ int	find_first(char const *s1, char const *set)
 
 int	find_last(char const *s1, char const *set)
 {
-	int	lens1;
+	int	i;
 	int	j;
+	int	count;
 
-	lens1 = ft_strlen(s1) - 1;
+	i = ft_strlen(s1) - 1;
 	j = -1;
-	while (set[++j] && lens1)
+	count = 0;
+	while (set[++j] && s1[i])
 	{
-		if (s1[lens1] == set[j])
+		if (s1[i] == set[j] && set[j] != '\0')
 		{
 			j = -1;
-			lens1--;
+			i--;
+			count++;
 		}
 	}
-	return (lens1);
+	return (count);
 }
 
 char	*ft_strtrim(char const *s1, char const *set)
 {
 	char	*ptr;
-	int		var[4];
+	int		first;
+	int		last;
 
-	var[2] = find_first(s1, set);
-	var[3] = find_last(s1, set);
-	var[1] = 0;
-	var[0] = -1;
-	if (!ft_strlen(s1) || (var[2] == 0
-			&& var[3] == (int)(ft_strlen(s1) - 1)))
-		ptr = (char *) malloc(ft_strlen(s1) + 1);
-	else if (var[2] < var[3])
-		ptr = (char *) malloc(ft_strlen(s1)
-				- (var[2] + (ft_strlen(s1) - var[3])));
-	else
-		ptr = malloc(sizeof(char));
-	if (ptr == 0)
-		return (0);
-	while (s1[++var[0]])
-	{
-		if (var[0] >= var[2] && var[0] <= var[3])
-			ptr[var[1]++] = s1[var[0]];
-	}
-	ptr[var[1]] = '\0';
+	first = find_first(s1, set);
+	last = find_last(s1, set);
+	ptr = ft_substr(s1, first, ft_strlen(s1) - first - last);
 	return (ptr);
 }
